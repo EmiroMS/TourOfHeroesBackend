@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/heroes")
 public class HeroController {
@@ -69,5 +71,16 @@ public class HeroController {
         heroService.deleteHero(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    @ApiOperation(value = "Busca todos los heroes",  response = List.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Heroes encontrados existosamente"),
+            @ApiResponse(code = 500, message = "Error interno al procesar la respuesta")})
+    public ResponseEntity<List<Hero>> getAllHeroes() {
+        log.info("Rest request buscar todos los heroes");
+        return ResponseEntity.ok(heroService.getAllHeroes());
+    }
+
 
 }
