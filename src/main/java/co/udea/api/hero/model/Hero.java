@@ -11,7 +11,7 @@ public class Hero {
 
     @Id
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -19,16 +19,16 @@ public class Hero {
     public Hero() {
     }
 
-    public Hero(Integer id, String name) {
+    public Hero(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

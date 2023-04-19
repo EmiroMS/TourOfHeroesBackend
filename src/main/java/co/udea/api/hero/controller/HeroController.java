@@ -1,9 +1,12 @@
 package co.udea.api.hero.controller;
 
 import co.udea.api.hero.model.Hero;
+import co.udea.api.hero.modelDTO.HeroDTO;
+import co.udea.api.hero.repository.HeroRepository;
 import co.udea.api.hero.service.HeroService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +21,9 @@ import java.util.List;
 public class HeroController {
 
     private final Logger log = LoggerFactory.getLogger(HeroController.class);
+
+    @Autowired
+    private HeroRepository heroRepository;
 
     private HeroService heroService;
 
@@ -42,10 +48,18 @@ public class HeroController {
             @ApiResponse(code = 201, message = "Hero creado exitosamente"),
             @ApiResponse(code = 400, message = "La petición es invalida"),
             @ApiResponse(code = 500, message = "Error interno al procesar la respuesta")})
-    public ResponseEntity<Hero> createHero(@RequestBody Hero hero){
-        log.info("Rest request crear heroe: "+ hero);
-        Hero createdHero = heroService.createHero(hero);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdHero);
+    public HeroDTO createHero(@RequestBody HeroDTO heroDTO) {
+        // Crear un objeto Hero a partir de los datos recibidos en el HeroDTO
+        Hero hero = new Hero();
+        hero.setName(heroDTO.getName());
+
+        // Guardar el objeto Hero en la base de datos
+        heroRepository.save(hero);
+        // Crear un objeto HeroDTO a partir de los datos del nuevo Hero y devolverlo
+        HeroDTO createdHeroDTO = new HeroDTO();
+        createdHeroDTO.setId(hero.getId());
+        createdHeroDTO.setName(hero.getName());
+        return createdHeroDTO;
     }
 
     @PutMapping("{id}")
